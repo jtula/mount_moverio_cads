@@ -84,7 +84,7 @@ module top(pos=[0,0,0]) {
   pos_arm = [-(pos_base[0] + twidth/2 - topArmHeight/2), pos_base[1] + theight/2 - topArmHeight/2 , pos_base[2] + tdepth/2];
 
   translate(pos) {
-    top_arm(topArmWidth, topArmHeight, screw_radius, screw_distance, nscrew, pos_arm, fn=30);
+    top_arm(topArmWidth, topArmHeight, screw_radius, screw_distance, nscrew, pos_arm, fn);
     top_base(twidth, theight, tdepth, pos_base, fn);	
   }
 }
