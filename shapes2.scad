@@ -1,7 +1,7 @@
 module innerMold(size, r, s, cs, fn=20) {
 	borderRadius = r;
 	moldSize = [size[0], size[1], size[2]];
-	
+
 	coords = (moldSize - [2*borderRadius, 2*borderRadius, 2*borderRadius])/2;
 
 	x = coords[0];
