@@ -9,18 +9,18 @@ module innerMold(size, r, s, cs, fn=20) {
   z = coords[2];
 
   positions = [
-    [x,			y,		z],
-    [x,			0,		z],
-    [-x,		0,		z],
-    [-x,		y,		z],
-    [-x, 	 -y,	z-s],
-    [0, -y-cs,	z-s],
-    [x,	 	 -y,	z-s],
-    [x,			y, 	 -z],
-    [-x,		y, 	 -z],
-    [-x,   -y, 	 -z],
-    [0, -y-cs, 	 -z],
-    [x,	 	 -y, 	 -z]
+    [ x,     y,   z],
+	  [ x,     0,   z],
+    [-x,     0,   z],
+    [-x,     y,   z],
+    [-x,    -y, z-s],
+    [ 0, -y-cs, z-s],
+    [ x,    -y, z-s],
+    [ x,     y,  -z],
+    [-x,     y,  -z],
+    [-x,    -y,  -z],
+    [ 0, -y-cs,  -z],
+    [ x,    -y,  -z]
   ];
 
   hull() {
