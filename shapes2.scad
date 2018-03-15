@@ -10,7 +10,7 @@ module innerMold(size, r, s, cs, fn=20) {
 
   positions = [
     [ x,     y,   z],
-	  [ x,     0,   z],
+    [ x,     0,   z],
     [-x,     0,   z],
     [-x,     y,   z],
     [-x,    -y, z-s],
