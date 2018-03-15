@@ -1,34 +1,33 @@
 module innerMold(size, r, s, cs, fn=20) {
-	borderRadius = r;
-	moldSize = [size[0], size[1], size[2]];
+  borderRadius = r;
+  moldSize = [size[0], size[1], size[2]];
 
-	coords = (moldSize - [2*borderRadius, 2*borderRadius, 2*borderRadius])/2;
+  coords = (moldSize - [2*borderRadius, 2*borderRadius, 2*borderRadius])/2;
 
-	x = coords[0];
-	y = coords[1];
-	z = coords[2];
+  x = coords[0];
+  y = coords[1];
+  z = coords[2];
 
-	positions = [
-		[x,			y,		z],
-		[x,			0,		z],
-		[-x,		0,		z],
-		[-x,		y,		z],
-		[-x, 	 -y,	z-s],
-		[0, -y-cs,	z-s],
-		[x,	 	 -y,	z-s],
-		[x,			y, 	 -z],
-		[-x,		y, 	 -z],
-		[-x,   -y, 	 -z],
-		[0, -y-cs, 	 -z],
-		[x,	 	 -y, 	 -z]
-	];
+  positions = [
+    [x,			y,		z],
+    [x,			0,		z],
+    [-x,		0,		z],
+    [-x,		y,		z],
+    [-x, 	 -y,	z-s],
+    [0, -y-cs,	z-s],
+    [x,	 	 -y,	z-s],
+    [x,			y, 	 -z],
+    [-x,		y, 	 -z],
+    [-x,   -y, 	 -z],
+    [0, -y-cs, 	 -z],
+    [x,	 	 -y, 	 -z]
+  ];
 
-
-	hull() {
-		for(pos = positions)
-			translate(pos)
-				sphere(r = borderRadius, $fn = fn);
-	}
+  hull() {
+    for(pos = positions)
+      translate(pos)
+        sphere(r = borderRadius, $fn = fn); 
+  }
 }
 
 
