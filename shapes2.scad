@@ -45,7 +45,7 @@ module rcylinder(r, h, center, both, $fn = 100) {
       translate([0, 0, -h/2]) {
         cylinder(r = r, h = hc, $fn = $fn);
           translate([0, 0, hc]) 
-						sphere(r = r, $fn = $fn);
+            sphere(r = r, $fn = $fn);
       }
 		}       
 }
