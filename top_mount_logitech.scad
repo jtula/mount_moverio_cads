@@ -22,11 +22,15 @@ module top_arm(width, height, screw_radius, screw_distance, nscrew, pos_arm=[0,0
         cube([supp_base_width, supp_base_height, supp_base_depth], true);
         union() {					
           for (i=[0:nscrew-1]) {
-            translate([i*screw_distance - supp_base_width/4, -supp_base_height/2+screw_radius*8, -supp_base_depth/2+0.5])
+            translate([i*screw_distance - supp_base_width/4, 
+                      -supp_base_height/2+screw_radius*8, 
+                      -supp_base_depth/2+0.5])
               cylinder(r=screw_radius, h=supp_base_depth, $fn=20);
           }
           for (i=[0:nscrew-1]) {
-            translate([i*screw_distance - supp_base_width/4, supp_base_height/2-screw_radius*8, -supp_base_depth/2+0.5])
+            translate([i*screw_distance - supp_base_width/4, 
+                       supp_base_height/2-screw_radius*8, 
+                       -supp_base_depth/2+0.5])
               cylinder(r=screw_radius, h=supp_base_depth, $fn=fn);
           }
         }
