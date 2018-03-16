@@ -53,7 +53,7 @@ module top_base(width, height, depth, pos_base=[0, 0, 0], fn=30) {
   imoldRadius = 2;
   cs = 0.6;
 
-  posInnerMold = [pos_base[0], pos_base[1], pos_base[2] - depth];
+  posInnerMold = [pos_base[0], pos_base[1], pos_base[2] - (depth/2 + imoldDepth/2 - 2)];
 
   difference() {
     translate(pos_base)
@@ -74,14 +74,61 @@ module top(pos=[0,0,0]) {
   topArmHeight = 6;
   screw_radius = 0.8/2;
   screw_distance = 4;
-  nscrew = 3;
+  screw_side_hdistance = screw_radius*2 + 5;
+  screw_side_vdistance = screw_radius*2 + 2;
+  nscrew = 3;  
   fn = 30;
   twidth = 24;
   theight = 26;
   tdepth = 6;
 
+  //--left and right side parameters
+  side_width = twidth;
+  side_height = 10;
+  side_depth = 4/2;
+  side_rot = [90, 0, 0];
+
   pos_base = [0, 0, 0];
-  pos_arm = [-(pos_base[0] + twidth/2 - topArmHeight/2), pos_base[1] + theight/2 - topArmHeight/2 , pos_base[2] + tdepth/2];
+  pos_arm = [-(pos_base[0] + twidth/2 - topArmHeight/2), 
+             pos_base[1] + theight/2 - topArmHeight/2, 
+             pos_base[2] + tdepth/2];
+
+  pos_right_side = [pos_base[0]-side_width/2, 
+                   pos_base[1]+theight/2, 
+                   pos_base[2]-side_height-tdepth/2];
+
+  pos_left_side = [pos_base[0]-side_width/2, 
+                    pos_base[1]-theight/2+side_depth, 
+                    pos_base[2]-side_height-tdepth/2];
+
+  //-------------------LEFT SIDE----------------------------//
+  translate(pos_left_side)
+    rotate(side_rot)
+    cube([side_width, side_height, side_depth]);
+    for (i=[0:nscrew-1]) {
+      for (j=[0:nscrew-1]) {
+        translate([pos_left_side[0]/2 + j*screw_side_hdistance, 
+                 pos_left_side[1], 
+                 pos_left_side[2]/1.2 + i*screw_side_vdistance])
+        rotate(side_rot)
+          rcylinder(r=screw_radius, h=side_depth, false, false, $fn=30);
+      }
+    }
+
+
+  //-------------------RIGHT SIDE----------------------------//
+  translate(pos_right_side)
+    rotate(side_rot)
+    cube([side_width, side_height, side_depth]);
+    for (i=[0:nscrew-1]) {
+      for (j=[0:nscrew-1]) {
+        translate([pos_right_side[0]/2 + j*screw_side_hdistance, 
+                 pos_right_side[1]-side_depth, 
+                 pos_right_side[2]/1.2 + i*screw_side_vdistance])
+        rotate(-side_rot)
+          rcylinder(r=screw_radius, h=side_depth, false, false, $fn=30);
+      }
+    }
 
   translate(pos) {
     top_arm(topArmWidth, topArmHeight, screw_radius, screw_distance, nscrew, pos_arm, fn);
