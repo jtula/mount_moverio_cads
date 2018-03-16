@@ -9,6 +9,11 @@ sloping_angle = 10;
 angle = 30;
 extra = 5;
 fn = 30;
+screw_radius = 0.8/2;
+nscrew = 4;
+screw_side_hdistance = screw_radius*2 + 5;
+screw_side_vdistance = screw_radius*2 + 2;
+
 
 //--bottom square parameters
 poly_width = 24;
@@ -20,13 +25,16 @@ side_width = poly_width;
 side_height = 24;
 side_depth = 4;
 side_rot = [90, 0, 0];
+side_diff_width = side_width;
+side_diff_height = 15;
+side_diff_depth = side_depth/2;
 
 //--inner mold parameters
 iw = 18.5;
 ih = poly_width + extra;
 id = 31;
 ir = 2;
-cs = 0.8;
+cs = 0.7;
 
 //--Positions
 pos_base = [-poly_width/4, 0, 0];
@@ -34,19 +42,55 @@ pos_square = [-15, -poly_depth/2, 3.5];
 pos_left_side = [pos_square[X], pos_square[Y]+side_depth, pos_square[Z]+poly_height];
 pos_right_side = [pos_square[X], -pos_square[Y], pos_square[Z]+poly_height];
 pos_inner_mold = [pos_square[X]+poly_width/2, 0, pos_square[Z]+19];
+pos_diff_left_side = [0, side_height-side_diff_height, side_diff_depth];
 
 difference() {
   union(){
   //-------------------LEFT SIDE----------------------------//
-  translate(pos_left_side)
-  rotate(side_rot)
-    cube([side_width, side_height, side_depth], false);
+  translate(pos_left_side) {
+  
+  rotate(side_rot) 
+    union() { 
+      difference() {
+        difference() {
+          cube([side_width, side_height, side_depth], false);
+          translate(pos_diff_left_side)
+            cube([side_diff_width, side_diff_height, side_diff_depth], false);
+        }
+        
+        for (i=[0:nscrew-1]) {
+          for (j=[0:nscrew-1]) {
+            translate([side_depth + j*screw_side_hdistance, 
+                      pos_diff_left_side[1]*1.5 + i*screw_side_vdistance, 
+                      pos_diff_left_side[2]])            
+              rcylinder(r=screw_radius, h=side_depth, false, false, $fn=fn);
+          }
+        }  
+      }
+    }
+  }
 
   //-------------------RIGHT SIDE----------------------------//
   translate(pos_right_side)
   rotate(side_rot)
-    cube([side_width, side_height, side_depth], false);
-
+    union() {
+      difference(){
+        difference() {
+          cube([side_width, side_height, side_depth], false);
+          translate([0, side_height-side_diff_height, 0])
+            cube([side_diff_width, side_diff_height, side_diff_depth], false);
+        }
+        rotate(-90*side_rot)
+        for (i=[0:nscrew-1]) {
+          for (j=[0:nscrew-1]) {
+            translate([side_depth + j*screw_side_hdistance, 
+                      -(pos_diff_left_side[1]*1.5 + i*screw_side_vdistance), 
+                      -pos_diff_left_side[2]])            
+              rcylinder(r=screw_radius, h=side_depth, false, false, $fn=fn);
+          }
+        }
+      }
+    }
   //-------------------SQUARE BASE-------------------------//
   sa = sin(sloping_angle) * poly_width + 0.5;
   p0 = [0         ,          0,           0];

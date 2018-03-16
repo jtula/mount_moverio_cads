@@ -80,7 +80,7 @@ module top(pos=[0,0,0]) {
   screw_distance = 4;
   screw_side_hdistance = screw_radius*2 + 5;
   screw_side_vdistance = screw_radius*2 + 2;
-  nscrew = 3;  
+  nscrew = 3;
   fn = 30;
   twidth = 24;
   theight = 26;
@@ -88,7 +88,7 @@ module top(pos=[0,0,0]) {
 
   //--left and right side parameters
   side_width = twidth;
-  side_height = 10;
+  side_height = 15;
   side_depth = 4/2;
   side_rot = [90, 0, 0];
 
@@ -115,7 +115,7 @@ module top(pos=[0,0,0]) {
                  pos_left_side[1], 
                  pos_left_side[2]/1.2 + i*screw_side_vdistance])
         rotate(side_rot)
-          rcylinder(r=screw_radius, h=side_depth, false, false, $fn=30);
+          rcylinder(r=screw_radius, h=side_depth, false, false, $fn=fn);
       }
     }
 
