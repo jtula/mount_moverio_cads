@@ -135,7 +135,7 @@ module top(pos=[0,0,0], both) {
     }
 
   translate(pos) {
-    if (both == true) {
+    if (both) {
       top_arm(topArmWidth, topArmHeight, screw_radius, screw_distance, nscrew, pos_arm, fn);
       top_base(twidth, theight, tdepth, pos_base, fn);	 
     } else {      
