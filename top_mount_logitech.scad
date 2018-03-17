@@ -47,7 +47,7 @@ module top_arm(width, height, screw_radius, screw_distance, nscrew, pos_arm=[0,0
 
 module top_base(width, height, depth, pos_base=[0, 0, 0], fn=30) {
 
-  angle = 0;
+  angle = -2;
   extra = 5;
 
   //--inner mold parameters
