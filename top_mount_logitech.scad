@@ -47,7 +47,7 @@ module top_arm(width, height, screw_radius, screw_distance, nscrew, pos_arm=[0,0
 
 module top_base(width, height, depth, pos_base=[0, 0, 0], fn=30) {
 
-  angle = -2;
+  angle = 0;
   extra = 5;
 
   //--inner mold parameters
@@ -73,7 +73,7 @@ module top_base(width, height, depth, pos_base=[0, 0, 0], fn=30) {
   }
 }
 
-module top(pos=[0,0,0]) {
+module top(pos=[0,0,0], both) {
   topArmWidth = 5;
   topArmHeight = 6;
   screw_radius = 0.8/2;
@@ -115,7 +115,7 @@ module top(pos=[0,0,0]) {
                  pos_left_side[1], 
                  pos_left_side[2]/1.2 + i*screw_side_vdistance])
         rotate(side_rot)
-          rcylinder(r=screw_radius, h=side_depth, false, false, $fn=fn);
+          rcylinder(r=screw_radius, h=side_depth, false, false, fn);
       }
     }
 
@@ -130,14 +130,36 @@ module top(pos=[0,0,0]) {
                  pos_right_side[1]-side_depth, 
                  pos_right_side[2]/1.2 + i*screw_side_vdistance])
         rotate(-side_rot)
-          rcylinder(r=screw_radius, h=side_depth, false, false, $fn=30);
+          rcylinder(r=screw_radius, h=side_depth, false, false, fn);
       }
     }
 
   translate(pos) {
-    top_arm(topArmWidth, topArmHeight, screw_radius, screw_distance, nscrew, pos_arm, fn);
-    top_base(twidth, theight, tdepth, pos_base, fn);	
+    if (both == true) {
+      top_arm(topArmWidth, topArmHeight, screw_radius, screw_distance, nscrew, pos_arm, fn);
+      top_base(twidth, theight, tdepth, pos_base, fn);	 
+    } else {      
+      difference() {    
+        top_base(twidth, theight, tdepth, pos_base, fn);	
+        translate([pos_arm[0], pos_arm[1], pos_arm[2]-topArmHeight/1.5])
+        rcylinder(screw_radius*3, topArmHeight, false, true, fn);
+      }
+    }
   }
 }
 
+
 top();
+
+//--ONLY ARM
+topArmWidth = 5;
+topArmHeight = 6;
+screw_radius = 0.8/2;
+screw_distance = 4;
+nscrew = 4;
+fn = 100;
+
+//pos_arm = [0,0,0];
+//top_arm(topArmWidth, topArmHeight, screw_radius, screw_distance, nscrew, pos_arm, fn);
+//translate([pos_arm[0], pos_arm[1], pos_arm[2]-topArmHeight*1.2])
+//  rcylinder(screw_radius*3, topArmHeight, false, true, fn);
