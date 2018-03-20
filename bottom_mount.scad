@@ -10,7 +10,7 @@ angle = 30;
 extra = 5;
 fn = 30;
 screw_radius = 0.8/2;
-nscrew = 4;
+nscrew = 3;
 screw_side_hdistance = screw_radius*2 + 5;
 screw_side_vdistance = screw_radius*2 + 2;
 
@@ -60,7 +60,7 @@ difference() {
         
         for (i=[0:nscrew-1]) {
           for (j=[0:nscrew-1]) {
-            translate([side_depth + j*screw_side_hdistance, 
+            translate([side_depth*1.5 + j*screw_side_hdistance, 
                       pos_diff_left_side[1]*1.5 + i*screw_side_vdistance, 
                       pos_diff_left_side[2]])            
               rcylinder(r=screw_radius, h=side_depth, false, false, $fn=fn);
@@ -83,7 +83,7 @@ difference() {
         rotate(-90*side_rot)
         for (i=[0:nscrew-1]) {
           for (j=[0:nscrew-1]) {
-            translate([side_depth + j*screw_side_hdistance, 
+            translate([side_depth*1.5 + j*screw_side_hdistance, 
                       -(pos_diff_left_side[1]*1.5 + i*screw_side_vdistance), 
                       -pos_diff_left_side[2]])            
               rcylinder(r=screw_radius, h=side_depth, false, false, $fn=fn);
