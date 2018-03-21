@@ -1,7 +1,8 @@
 use<shapes2.scad>;
 
-module top_arm(width, height, screw_radius, screw_distance, nscrew, pos_arm=[0,0,0], fn=30) {
+module top_arm(width, height, screw_radius, screw_distance, nscrew, pos_arm=[0,0,0], logitech=true, fn=100) {
 
+  cyl_height = 10;
   arm_radius = 3;
   arm_point_ref = [width, 0, height];
   arm_points = [
@@ -18,22 +19,28 @@ module top_arm(width, height, screw_radius, screw_distance, nscrew, pos_arm=[0,0
   union() {
     pos_cyl = [arm_point_ref[0], arm_point_ref[1], arm_point_ref[2]+arm_radius];
     translate(pos_cyl)
-      difference() {
-        cube([supp_base_width, supp_base_height, supp_base_depth], true);
-        union() {					
-          for (i=[0:nscrew-1]) {
-            translate([i*screw_distance - supp_base_width/4, 
-                      -supp_base_height/2+screw_radius*8, 
-                      -supp_base_depth/2+0.5])
-              cylinder(r=screw_radius, h=supp_base_depth, $fn=20);
-          }
-          for (i=[0:nscrew-1]) {
-            translate([i*screw_distance - supp_base_width/4, 
-                       supp_base_height/2-screw_radius*8, 
-                       -supp_base_depth/2+0.5])
-              cylinder(r=screw_radius, h=supp_base_depth, $fn=fn);
+      if(logitech) {
+        difference() {
+          cube([supp_base_width, supp_base_height, supp_base_depth], true);
+          union() {					
+            for (i=[0:nscrew-1]) {
+              translate([i*screw_distance - supp_base_width/4, 
+                        -supp_base_height/2+screw_radius*8, 
+                        -supp_base_depth/2+0.5])
+                cylinder(r=screw_radius, h=supp_base_depth, $fn=20);
+            }
+            for (i=[0:nscrew-1]) {
+              translate([i*screw_distance - supp_base_width/4, 
+                        supp_base_height/2-screw_radius*8, 
+                        -supp_base_depth/2+0.5])
+                cylinder(r=screw_radius, h=supp_base_depth, $fn=fn);
+            }
           }
         }
+      } else {
+        translate([arm_radius+1, 0, 0])
+        rotate([90, 90, 0])
+          cylinder(r=arm_radius, h=cyl_height, center=true, $fn=fn);
       }
 
     hull(){
@@ -45,7 +52,7 @@ module top_arm(width, height, screw_radius, screw_distance, nscrew, pos_arm=[0,0
   }	
 }
 
-module top_base(width, height, depth, pos_base=[0, 0, 0], fn=30) {
+module top_base(width, height, depth, pos_base=[0, 0, 0], fn=100) {
 
   angle = -2;
   extra = 5;
@@ -81,7 +88,7 @@ module top(pos=[0,0,0], both) {
   screw_side_hdistance = screw_radius*2 + 5;
   screw_side_vdistance = screw_radius*2 + 2;
   nscrew = 3;
-  fn = 30;
+  fn = 100;
   twidth = 24;
   theight = 26;
   tdepth = 6;
@@ -97,13 +104,13 @@ module top(pos=[0,0,0], both) {
              pos_base[1] + theight/2 - topArmHeight/2, 
              pos_base[2] + tdepth/2];
 
-  pos_right_side = [pos_base[0]-side_width/2, 
-                   pos_base[1]+theight/2, 
-                   pos_base[2]-side_height-tdepth/2];
+  pos_right_side = [pos[0] - side_width/2, 
+                   pos[1] + theight/2, 
+                   pos[2] - side_height-tdepth/2];
 
-  pos_left_side = [pos_base[0]-side_width/2, 
-                    pos_base[1]-theight/2+side_depth, 
-                    pos_base[2]-side_height-tdepth/2];
+  pos_left_side = [pos[0] - side_width/2, 
+                    pos[1] - theight/2+side_depth, 
+                    pos[2] - side_height-tdepth/2];
 
   //-------------------LEFT SIDE----------------------------//
   translate(pos_left_side)
@@ -111,7 +118,7 @@ module top(pos=[0,0,0], both) {
     cube([side_width, side_height, side_depth]);
     for (i=[0:nscrew-1]) {
       for (j=[0:nscrew-1]) {
-        translate([pos_left_side[0]/2 + j*screw_side_hdistance, 
+        translate([pos_left_side[0]+side_width/4 + j*screw_side_hdistance, 
                  pos_left_side[1], 
                  pos_left_side[2]/1.2 + i*screw_side_vdistance])
         rotate(side_rot)
@@ -126,7 +133,7 @@ module top(pos=[0,0,0], both) {
     cube([side_width, side_height, side_depth]);
     for (i=[0:nscrew-1]) {
       for (j=[0:nscrew-1]) {
-        translate([pos_right_side[0]/2 + j*screw_side_hdistance, 
+        translate([pos_left_side[0]+side_width/4 + j*screw_side_hdistance, 
                  pos_right_side[1]-side_depth, 
                  pos_right_side[2]/1.2 + i*screw_side_vdistance])
         rotate(-side_rot)
@@ -148,18 +155,17 @@ module top(pos=[0,0,0], both) {
   }
 }
 
+module arm(pos=[0,0,0], logitech=true) {
 
-top();
+  topArmWidth = 5;
+  topArmHeight = 6;
+  screw_radius = 0.8/2;
+  screw_distance = 4;
+  nscrew = 4;
+  fn = 100;
 
-//--ONLY ARM
-topArmWidth = 5;
-topArmHeight = 6;
-screw_radius = 0.8/2;
-screw_distance = 4;
-nscrew = 4;
-fn = 100;
-
-//pos_arm = [0,0,0];
-//top_arm(topArmWidth, topArmHeight, screw_radius, screw_distance, nscrew, pos_arm, fn);
-//translate([pos_arm[0], pos_arm[1], pos_arm[2]-topArmHeight*1.2])
-//  rcylinder(screw_radius*3, topArmHeight, false, true, fn);
+  pos_arm = pos;
+  top_arm(topArmWidth, topArmHeight, screw_radius, screw_distance, nscrew, pos_arm, logitech, fn);
+  translate([pos_arm[0], pos_arm[1], pos_arm[2]-topArmHeight*1.2])
+    rcylinder(screw_radius*3, topArmHeight, false, true, fn);
+}
