@@ -7,7 +7,7 @@ module bottom(pos=[0,0,0], rot=[0,0,0]) {
 
   //--common parameters
   sloping_angle = 10;
-  angle = 30;
+  angle = 15;
   extra = 5;
   fn = 100;
   screw_radius = 0.8/2;

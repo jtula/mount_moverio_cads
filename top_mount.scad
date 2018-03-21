@@ -83,7 +83,7 @@ module top_base(width, height, depth, pos_base=[0, 0, 0], fn=100) {
 module top(pos=[0,0,0], both) {
   topArmWidth = 5;
   topArmHeight = 6;
-  screw_radius = 0.8/2;
+  screw_radius = 1.0/2;
   screw_distance = 4;
   screw_side_hdistance = screw_radius*2 + 5;
   screw_side_vdistance = screw_radius*2 + 2;
